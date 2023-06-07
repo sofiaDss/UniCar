@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">UniCar</string>
+    <string name="quienes_somos">Mantente conectado con las personas de tu Universidad, que comparten la misma ruta que tu, ya sea desde o hacia tu campus universitario.</string>
+    <string name="descripcion_pasajero">Si eres un usuario pasajero, consulta los conductores que pueden darte un aventón. Así, llega rápido, seguro y cómodo a tu campus o a tu hogar por un costo de $3000.</string>
+    <string name="descripcion_conductor">Si eres un usuario conductor, interactúa con las personas de tu universidad que necesitan transporte. Ayuda al medio ambiente y a la movilidad de tu ciudad, obteniendo un beneficio económico adicional.</string>
 </resources>
