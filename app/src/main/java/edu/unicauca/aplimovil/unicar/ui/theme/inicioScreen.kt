@@ -35,9 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.unicauca.aplimovil.unicar.R
 
+
 @Composable
 fun MainScreen() {
     val scrollState = rememberScrollState()
+
     Column(modifier = Modifier.fillMaxSize()) {
         Column (modifier = Modifier
             .fillMaxWidth()
@@ -88,8 +90,9 @@ fun MainScreen() {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         ///////
+
                         Button(
-                            onClick = { /* Lógica del botón de registro */ },
+                            onClick = {  },
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .height(48.dp)
