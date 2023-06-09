@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -50,7 +52,6 @@ fun homeConductorScreen() {
                         modifier = Modifier.size(64.dp)
                     )
                     Text(text = "inicio")
-                    Text(text = "cerrar sesión")
                     Text(text = "pregunta")
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -112,7 +113,7 @@ fun homeConductorScreen() {
                         text = "Destino",
                         fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.darkBlue),
-                        modifier = Modifier.weight(0.40f)
+                        modifier = Modifier.weight(0.22f)
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -123,8 +124,8 @@ fun homeConductorScreen() {
                         onValueChange = {
                             // Acción al cambiar el valor del campo de texto
                         },
-                        label = { Text("Ingresa nuevamente tu contraseña") },
-                        modifier = Modifier.padding(end = 8.dp) // Espacio entre el campo de texto y la imagen
+                        label = { Text("Origen") },
+                        modifier = Modifier.weight(0.40f).height(40.dp).padding(start = 8.dp) // Espacio entre el campo de texto y la imagen
                     )
 
                     Image(
@@ -133,11 +134,18 @@ fun homeConductorScreen() {
                         alignment = Alignment.BottomStart,
                         modifier = Modifier
                             .padding(16.dp)
-                            .size(25.dp)
+                            .size(25.dp).weight(0.2f).padding(start=8.dp)
 
                         //contentScale = ContentScale.Crop
                     )
-                    Text(text = "destinoformulario")
+                    TextField(
+                        value = "",
+                        onValueChange = {
+                            // Acción al cambiar el valor del campo de texto
+                        },
+                        label = { Text("Destino") },
+                        modifier = Modifier.weight(0.40f).height(40.dp).padding(end = 8.dp) // Espacio entre el campo de texto y la imagen
+                    )
                 }
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
