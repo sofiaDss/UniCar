@@ -1,4 +1,4 @@
-package edu.unicauca.aplimovil.unicar.ui.theme
+package edu.unicauca.aplimovil.unicar.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
