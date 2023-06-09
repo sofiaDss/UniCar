@@ -2,6 +2,8 @@ package edu.unicauca.aplimovil.unicar
 
 import android.graphics.Paint.Align
 import android.os.Bundle
+import android.service.controls.ControlsProviderService
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 //import androidx.compose.foundation.layout.Column
@@ -42,24 +44,59 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : ComponentActivity() {
+    private val db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             UniCarTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-
-                }
+                mostrarInterfaz()
             }
         }
     }
+
+    @Composable
+    private fun mostrarInterfaz() {
+        // Crea una variable del estado para almacenar el texto del documento
+        val textoDocumento = remember { mutableStateOf("") }
+
+        obtenerDatos { document ->
+            if (document != null) {
+                val texto = document.getString("destino") // Reemplaza "nombre" con el nombre del campo de texto que deseas mostrar
+                textoDocumento.value = texto ?: ""
+            }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = textoDocumento.value,
+            )
+        }
+    }
+
+    private fun obtenerDatos(onSuccess: (document: DocumentSnapshot?) -> Unit) {
+        val docRef = db.collection("Rutas").document("b9uoxStmzVmF5oGpT0Qw")
+        docRef.get()
+            .addOnSuccessListener { document ->
+                onSuccess(document)
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ControlsProviderService.TAG, "get failed with ", exception)
+                onSuccess(null)
+            }
+    }
 }
+
 
 
 

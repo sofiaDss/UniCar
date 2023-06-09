@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "343668990187",
+    "project_id": "unicar-1b867",
+    "storage_bucket": "unicar-1b867.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343668990187:android:2079eac41e59a5f04d9eae",
+        "android_client_info": {
+          "package_name": "edu.unicauca.aplimovil.unicar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "343668990187-3s5ua0go4svvb3hp6um7fgb7cpk3cqtu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwSArtocjyMP9eDOBO5Cnz7P9-Oz7LonE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "343668990187-3s5ua0go4svvb3hp6um7fgb7cpk3cqtu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -49,7 +49,7 @@ fun homeConductorScreen() {
                     Image(
                         painter = imagen2,
                         contentDescription = null,
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier.size(64.dp).padding(8.dp)
                     )
                     Text(text = "inicio")
                     Text(text = "pregunta")
