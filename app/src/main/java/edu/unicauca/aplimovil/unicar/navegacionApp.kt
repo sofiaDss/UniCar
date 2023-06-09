@@ -14,6 +14,7 @@ enum class UnicarScreen() {
     abrirApp,
     inicioScreen,
     Registro,
+    inicioSesionScreen,
     homeConductorScreen
 }
 
