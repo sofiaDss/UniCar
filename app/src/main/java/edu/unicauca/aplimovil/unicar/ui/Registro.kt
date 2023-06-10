@@ -255,7 +255,9 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
 
                             if (nombre.isNotEmpty() && idUsuario != null && clave.isNotEmpty() && confirmPassword.isNotEmpty() && correo.isNotEmpty() && celular.isNotEmpty()){
                                 if(passwordsMatch){
-                                    viewModel.createUserWithEmailAndPassword(nombre, idUsuario, clave, correo, celular,navController)
+                                    viewModel.createUserWithEmailAndPassword(nombre, idUsuario, clave, correo, celular){
+                                        navController.navigate(UnicarScreen.inicioScreen.name)
+                                    }
                                     Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
                                     nombreValue.value = TextFieldValue()
                                     id_usuarioValue.value = TextFieldValue()

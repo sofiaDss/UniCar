@@ -24,6 +24,7 @@ class OrderViewModel: ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val _loading =  MutableLiveData(false)
+    private val firestore = Firebase.firestore
 
     fun registrarUsuario(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String) {
         // Crear un nuevo documento para el usuario en Firestore
@@ -89,7 +90,7 @@ class OrderViewModel: ViewModel() {
             }
     }
 
-    fun createUserWithEmailAndPassword(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String,navController: NavHostController){
+    fun createUserWithEmailAndPassword(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String, home: () -> Unit){
         if (_loading.value == false) {
             _loading.value = true
             auth.createUserWithEmailAndPassword(correo, clave)
@@ -103,6 +104,7 @@ class OrderViewModel: ViewModel() {
                             "id_usuario" to idUsuario,
                             "celular" to celular,
                             "correo" to correo,
+                            "clave" to clave,
                             "rol" to "pasajero"
                         )
 
@@ -111,7 +113,7 @@ class OrderViewModel: ViewModel() {
                             db.collection("Usuarios").document(userId)
                                 .set(userData)
                                 .addOnSuccessListener {
-                                    navController.navigate(UnicarScreen.inicioScreen.name)
+                                    home()
                                 }
                                 .addOnFailureListener { e ->
                                     Log.e("Registro", "Error al guardar los datos adicionales: ", e)
