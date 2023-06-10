@@ -36,7 +36,7 @@ fun UnicarApp(
 
         //Inicio App
         composable(route = UnicarScreen.inicioScreen.name){
-            MainScreen(navController)
+            MainScreen(navController,modifier,viewModel)
         }
 
         //Registro de usuario pasajero

@@ -39,7 +39,7 @@ import edu.unicauca.aplimovil.unicar.UnicarScreen
 
 
 @Composable
-fun MainScreen(navController : NavHostController, modifier: Modifier = Modifier) {
+fun MainScreen(navController : NavHostController, modifier: Modifier = Modifier,viewModel: OrderViewModel) {
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()) {

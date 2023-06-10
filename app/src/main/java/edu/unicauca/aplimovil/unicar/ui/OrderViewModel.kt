@@ -22,6 +22,9 @@ class OrderViewModel: ViewModel() {
     private val firebaseAuth: FirebaseAuth = Firebase.auth
     private val firebaseFirestore: FirebaseFirestore = Firebase.firestore
 
+    private val auth: FirebaseAuth = Firebase.auth
+    private val _loading =  MutableLiveData(false)
+
     fun registrarUsuario(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String) {
         // Crear un nuevo documento para el usuario en Firestore
         val usuario = hashMapOf(
@@ -86,5 +89,37 @@ class OrderViewModel: ViewModel() {
             }
     }
 
+    fun createUserWithEmailAndPassword(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String, home: () -> Unit){
+        if (_loading.value == false) {
+            _loading.value = true
+            auth.createUserWithEmailAndPassword(correo, clave)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        val userId = user?.uid
+                        // Guardar datos adicionales en Firestore
+                        val userData = hashMapOf(
+                            "nombre" to nombre,
+                            "id_usuario" to idUsuario,
+                            "celular" to celular,
+                            "rol" to "pasajero"
+                        )
 
+                        if (userId != null) {
+                            val db = Firebase.firestore
+                            db.collection("usuarios").document(userId)
+                                .set(userData)
+                                .addOnSuccessListener {
+                                    home()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("Registro", "Error al guardar los datos adicionales: ", e)
+                                }
+                        }
+                    } else {
+                        Log.d("Registro", "Registro completado: ${task.isSuccessful}")
+                    }
+                }
+        }
+    }
 }

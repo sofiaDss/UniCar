@@ -253,15 +253,21 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
                             val correo = correoValue.value.text
                             val celular = celularValue.value.text
 
-                            if (passwordsMatch && nombre.isNotEmpty() && idUsuario != null && clave.isNotEmpty() && correo.isNotEmpty() && celular.isNotEmpty()) {
-                                viewModel.registrarUsuario(nombre, idUsuario, clave, correo, celular)
-                                Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
-                                nombreValue.value = TextFieldValue()
-                                id_usuarioValue.value = TextFieldValue()
-                                claveValue.value = TextFieldValue()
-                                confirmarClaveValue.value=TextFieldValue()
-                                correoValue.value = TextFieldValue()
-                                celularValue.value = TextFieldValue()
+                            if (nombre.isNotEmpty() && idUsuario != null && clave.isNotEmpty() && confirmPassword.isNotEmpty() && correo.isNotEmpty() && celular.isNotEmpty()){
+                                if(passwordsMatch){
+                                    viewModel.createUserWithEmailAndPassword(nombre, idUsuario, clave, correo, celular,){
+                                    navController.navigate(UnicarScreen.inicioScreen.name)
+                                    }
+                                    Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+                                    nombreValue.value = TextFieldValue()
+                                    id_usuarioValue.value = TextFieldValue()
+                                    claveValue.value = TextFieldValue()
+                                    confirmarClaveValue.value=TextFieldValue()
+                                    correoValue.value = TextFieldValue()
+                                    celularValue.value = TextFieldValue()
+                                } else{
+                                    Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                                }
                             } else {
                                 // Manejar el caso de que alguna caja de texto esté vacía
                                 Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
