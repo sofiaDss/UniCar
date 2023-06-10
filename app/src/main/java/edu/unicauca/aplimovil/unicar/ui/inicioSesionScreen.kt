@@ -1,27 +1,49 @@
 package edu.unicauca.aplimovil.unicar.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
+import edu.unicauca.aplimovil.unicar.UnicarScreen
 
 
 @Composable
-fun inicioSesionScreen(){
+fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewModel){
+
+    var correoInput by remember { mutableStateOf("") }
+    var passwordInput by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +78,7 @@ fun inicioSesionScreen(){
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 40.dp,bottom = 30.dp),
+                        .padding(top = 40.dp, bottom = 30.dp),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
@@ -96,17 +118,24 @@ fun inicioSesionScreen(){
                             Spacer(modifier = Modifier.height(5.dp))
                             TextField(
                                 modifier = Modifier
-                                    .height(50.dp)
+                                    .height(60.dp)
                                     .fillMaxWidth()
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .background(colorResource(id = R.color.azul2)),
+                                value = correoInput,
+                                onValueChange = { correoInput = it },
+                                label = { Text("Ingresa tu correo institucional") },
+                                singleLine = true,
                                 colors = TextFieldDefaults.textFieldColors(
-                                    textColor = colorResource(id = R.color.azul1),
                                     cursorColor =  colorResource(id = R.color.azul1),
+                                    focusedIndicatorColor = colorResource(id = R.color.azul1)
                                 ),
-                                value = "", // Valor inicial del campo de texto
-                                onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
-                                label = { Text("Ingresa tu correo institucional") }
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Next
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                                )
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             Text(text = "Contraseña",
@@ -117,36 +146,46 @@ fun inicioSesionScreen(){
                             Spacer(modifier = Modifier.height(5.dp))
                             TextField(
                                 modifier = Modifier
-                                    .height(50.dp)
+                                    .height(60.dp)
                                     .fillMaxWidth()
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .background(colorResource(id = R.color.azul2)),
                                 colors = TextFieldDefaults.textFieldColors(
-                                    textColor = colorResource(id = R.color.azul1),
                                     cursorColor =  colorResource(id = R.color.azul1),
+                                    focusedIndicatorColor = colorResource(id = R.color.azul1)
                                 ),
-                                value = "", // Valor inicial del campo de texto
-                                onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
-                                label = { Text("Ingresa tu contraseña") }
+                                value = passwordInput,
+                                onValueChange = { passwordInput = it },
+                                label = { Text("Ingresa tu contraseña") },
+                                singleLine = true,
+                                visualTransformation = PasswordVisualTransformation(),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {focusManager.clearFocus()}
+                                )
                             )
-                            Spacer(modifier = Modifier.height(25.dp))
+                            Spacer(modifier = Modifier.height(15.dp))
                             Column(
                                 modifier = Modifier
-                                    .height(50.dp)
+                                    .height(60.dp)
                                     .fillMaxWidth(),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(
-                                    text = "¿Olvidaste la contraseña?",
+                                ClickableText(
+                                    text = AnnotatedString("¿Olvidaste la contraseña?"),
+                                    onClick = {navController.navigate(UnicarScreen.construccionScreen.name)},
                                     style = TextStyle(
                                         fontSize = 16.sp,
-                                        color = Color.Gray
+                                        color = Color.Gray,
+                                        textDecoration = TextDecoration.Underline
                                     ),
                                     modifier = Modifier.padding(top = 8.dp)
                                 )
                             }
-                            Spacer(modifier = Modifier.height(30.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -154,7 +193,18 @@ fun inicioSesionScreen(){
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Button(
-                                    onClick = { /* Acción al hacer clic en el botón de enviar formulario */ },
+                                    onClick = {
+                                        val correo = correoInput
+                                        val password = passwordInput
+
+                                        if (correo.isNotEmpty() && password.isNotEmpty()) {
+                                            Toast.makeText(context, "información completa", Toast.LENGTH_SHORT).show()
+
+                                        } else {
+
+                                            Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+                                        }
+                                    },
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(4.dp),
                                     colors = ButtonDefaults.buttonColors(
@@ -177,11 +227,10 @@ fun inicioSesionScreen(){
             }
         }
     }
-
 }
 
 @Preview
 @Composable
 fun inicioSesionScreenPreview(){
-    inicioSesionScreen()
+    //inicioSesionScreen()
 }

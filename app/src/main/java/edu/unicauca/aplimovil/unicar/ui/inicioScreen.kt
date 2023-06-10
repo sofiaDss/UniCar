@@ -112,7 +112,7 @@ fun MainScreen(navController : NavHostController, modifier: Modifier = Modifier)
                         }
                         /////////
                         Button(
-                            onClick = { /* Lógica del botón de registro */ },
+                            onClick = {navController.navigate(UnicarScreen.inicioSesionScreen.name)},
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .height(48.dp)

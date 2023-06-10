@@ -2,22 +2,20 @@ package edu.unicauca.aplimovil.unicar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import edu.unicauca.aplimovil.unicar.ui.OrderViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import edu.unicauca.aplimovil.unicar.ui.MainScreen
-import edu.unicauca.aplimovil.unicar.ui.abrirApp
-import edu.unicauca.aplimovil.unicar.ui.registroScreen
+import edu.unicauca.aplimovil.unicar.ui.*
 
 enum class UnicarScreen() {
     abrirApp,
     inicioScreen,
     Registro,
     inicioSesionScreen,
-    homeConductorScreen
+    homeConductorScreen,
+    construccionScreen
 }
 
 @Composable
@@ -36,12 +34,24 @@ fun UnicarApp(
             abrirApp(navController)
         }
 
-        //inicio App
+        //Inicio App
         composable(route = UnicarScreen.inicioScreen.name){
             MainScreen(navController)
         }
+
+        //Registro de usuario pasajero
         composable(route = UnicarScreen.Registro.name){
             registroScreen(Modifier,viewModel)
+        }
+
+        //Incio de sesión de usuario conductor
+        composable(route = UnicarScreen.inicioSesionScreen.name){
+            inicioSesionScreen(navController,viewModel)
+        }
+
+        //En contrucción
+        composable(route = UnicarScreen.construccionScreen.name){
+            construccionScreen()
         }
 
     }

@@ -1,5 +1,6 @@
 package edu.unicauca.aplimovil.unicar.ui
 
+import android.service.controls.ControlsProviderService
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import java.lang.ref.Reference
@@ -36,5 +38,11 @@ class OrderViewModel: ViewModel() {
                 } else {
                 }
             }
+    }
+
+    fun consultarCredenciales(correo: String, password: String) {
+        //firebaseFirestore.collection("Usuarios").get()
+        //EN CONSTRUCCIÓN
+
     }
 }
