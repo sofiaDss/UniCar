@@ -1,5 +1,6 @@
 package edu.unicauca.aplimovil.unicar.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,23 +19,38 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
 
 @Composable
-fun cuadrante_uno(modifier: Modifier = Modifier) {
-    val scrollState = rememberScrollState()
+fun registroScreen(modifier: Modifier = Modifier,viewModel: OrderViewModel) {
 
+    val confirmarClaveValue = remember { mutableStateOf(TextFieldValue()) }
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val nombreValue = remember { mutableStateOf(TextFieldValue())}
+    val id_usuarioValue = remember { mutableStateOf(TextFieldValue())}
+    val claveValue = remember { mutableStateOf(TextFieldValue())}
+    val correoValue = remember { mutableStateOf(TextFieldValue())}
+    val celularValue = remember { mutableStateOf(TextFieldValue())}
+    val isSaved = remember { mutableStateOf(false) }
+    val showError = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
@@ -117,11 +133,13 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 TextField(
-                    modifier = Modifier.height(50.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),
-                    value = "", // Valor inicial del campo de texto
-                    onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
+                    value = nombreValue.value,
+                    onValueChange = { nombreValue.value = it },
                     label = { Text("Ingresa tu nombre") }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -132,11 +150,13 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
-                    modifier = Modifier.height(50.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),
-                    value = "", // Valor inicial del campo de texto
-                    onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
+                    value = id_usuarioValue.value,
+                    onValueChange = { id_usuarioValue.value = it },
                     label = { Text("Ingresa tu identificación") }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -147,11 +167,13 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
-                    modifier = Modifier.height(50.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),
-                    value = "", // Valor inicial del campo de texto
-                    onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
+                    value = correoValue.value,
+                    onValueChange = { correoValue.value = it },
                     label = { Text("Ingresa tu correo institucional") }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -162,12 +184,15 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
-                    modifier = Modifier.height(50.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),
-                    value = "", // Valor inicial del campo de texto
-                    onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
-                    label = { Text("Ingresa tu contraseña") }
+                    value = claveValue.value,
+                    onValueChange = { claveValue.value = it },
+                    label = { Text("Ingresa tu contraseña") },
+                    visualTransformation = PasswordVisualTransformation()
 
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -178,12 +203,16 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
-                    modifier = Modifier.height(50.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),
-                    value = "", // Valor inicial del campo de texto
-                    onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
-                    label = { Text("Ingresa nuevamente tu contraseña") }
+                    value = confirmarClaveValue.value,
+                    onValueChange = { confirmarClaveValue.value = it },
+                    label = { Text("Ingresa nuevamente tu contraseña") },
+                    visualTransformation = PasswordVisualTransformation()
+
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(text = "Celular",
@@ -193,11 +222,13 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
-                    modifier = Modifier.height(50.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),
-                    value = "", // Valor inicial del campo de texto
-                    onValueChange = { /* Acción al cambiar el valor del campo de texto */ },
+                    value = celularValue.value,
+                    onValueChange = { celularValue.value = it },
                     label = { Text("Ingresa tu número de teléfono") }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -208,7 +239,28 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Button(
-                        onClick = { /* Acción al hacer clic en el botón de enviar formulario */ },
+                        onClick = {
+                            val password = claveValue.value.text
+                            val confirmPassword = confirmarClaveValue.value.text
+                            val passwordsMatch = verifyPasswordsMatch(password, confirmPassword)
+                            val nombre = nombreValue.value.text
+                            val idUsuario = id_usuarioValue.value.text.toIntOrNull() ?: 0
+                            val clave = claveValue.value.text
+                            val correo = correoValue.value.text
+                            val celular = celularValue.value.text
+                            Log.d("Registro", "Nombre: ${nombreValue.value.text}")
+                            Log.d("Registro", "ID Usuario: ${id_usuarioValue.value.text}")
+                            Log.d("Registro", "Clave: ${claveValue.value.text}")
+                            Log.d("Registro", "Correo: ${correoValue.value.text}")
+                            Log.d("Registro", "Celular: ${celularValue.value.text}")
+
+                            if (passwordsMatch) {
+                                viewModel.registrarUsuario(nombre, idUsuario, clave, correo, celular)
+                                showError.value = true
+                            } else {
+                                showError.value = true
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -222,7 +274,17 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold)
                         )
-
+                    }
+                    if (showError.value) {
+                        Text(
+                            text = "Las contraseñas no coinciden",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                color = Color.Red,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
                     }
                 }
             }
@@ -230,11 +292,12 @@ fun cuadrante_uno(modifier: Modifier = Modifier) {
     }
 }
 
+private fun verifyPasswordsMatch(password: String, confirmPassword: String): Boolean {
+    return password == confirmPassword
+}
+
 @Preview
 @Composable
 fun RegistroScreenPreview(){
-    cuadrante_uno(
-
-
-    )
+   // registroScreen(   )
 }

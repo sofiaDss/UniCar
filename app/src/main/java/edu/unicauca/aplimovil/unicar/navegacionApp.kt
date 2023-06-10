@@ -4,11 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import edu.unicauca.aplimovil.unicar.ui.OrderViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import edu.unicauca.aplimovil.unicar.ui.MainScreen
 import edu.unicauca.aplimovil.unicar.ui.abrirApp
+import edu.unicauca.aplimovil.unicar.ui.registroScreen
 
 enum class UnicarScreen() {
     abrirApp,
@@ -36,7 +38,10 @@ fun UnicarApp(
 
         //inicio App
         composable(route = UnicarScreen.inicioScreen.name){
-            MainScreen()
+            MainScreen(navController)
+        }
+        composable(route = UnicarScreen.Registro.name){
+            registroScreen(Modifier,viewModel)
         }
 
     }

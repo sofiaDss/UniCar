@@ -33,11 +33,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
+import edu.unicauca.aplimovil.unicar.UnicarScreen
 
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController : NavHostController, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -92,7 +94,7 @@ fun MainScreen() {
                         ///////
 
                         Button(
-                            onClick = {  },
+                            onClick = {navController.navigate(UnicarScreen.Registro.name)},
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .height(48.dp)
@@ -292,9 +294,9 @@ fun MainScreen() {
 @Preview
 @Composable
 fun MainScreenPreview(){
-    MainScreen(
+    //MainScreen(
 
         //quantityOptions = DataSource.quantityOptions,
         //modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.padding_medium))
-    )
+    //)
 }
