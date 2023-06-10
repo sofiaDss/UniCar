@@ -41,12 +41,17 @@ fun UnicarApp(
 
         //Registro de usuario pasajero
         composable(route = UnicarScreen.Registro.name){
-            registroScreen(Modifier,viewModel)
+            registroScreen(navController,Modifier,viewModel)
         }
 
         //Incio de sesión de usuario conductor
         composable(route = UnicarScreen.inicioSesionScreen.name){
             inicioSesionScreen(navController,viewModel)
+        }
+
+        //Incio de sesión de usuario conductor
+        composable(route = UnicarScreen.homeConductorScreen.name){
+            homeConductorScreen(navController,modifier,viewModel)
         }
 
         //En contrucción

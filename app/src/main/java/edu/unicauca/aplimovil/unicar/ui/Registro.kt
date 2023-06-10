@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -38,9 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
+import edu.unicauca.aplimovil.unicar.UnicarScreen
 
 @Composable
-fun registroScreen(modifier: Modifier = Modifier,viewModel: OrderViewModel) {
+fun registroScreen(navController : NavHostController,modifier: Modifier = Modifier,viewModel: OrderViewModel) {
 
     val confirmarClaveValue = remember { mutableStateOf(TextFieldValue()) }
     val scrollState = rememberScrollState()
@@ -65,7 +67,7 @@ fun registroScreen(modifier: Modifier = Modifier,viewModel: OrderViewModel) {
             modifier = Modifier
 
                 .fillMaxWidth()
-                .height(100.dp)
+                .height(180.dp)
                 .clip(shape = RoundedCornerShape(bottomStart = 16.dp))
                 .background(color = colorResource(id = R.color.azul1))  ,
             contentAlignment = Alignment.Center
@@ -74,6 +76,7 @@ fun registroScreen(modifier: Modifier = Modifier,viewModel: OrderViewModel) {
                 painter = painterResource(R.drawable.unicar_sinfondo),
                 contentDescription = "1",
                 modifier = Modifier.fillMaxSize()
+                    .scale(0.8f)
             )
         }
         Text(
@@ -94,7 +97,7 @@ fun registroScreen(modifier: Modifier = Modifier,viewModel: OrderViewModel) {
             modifier = Modifier.padding(top = 8.dp)
         )
         Button(
-            onClick = { /* Acción al hacer clic en el botón de inicio de sesión */ },
+            onClick = { navController.navigate(UnicarScreen.inicioSesionScreen.name) },
             modifier = Modifier
                 //.padding(top = 16.dp)
                 .fillMaxWidth()

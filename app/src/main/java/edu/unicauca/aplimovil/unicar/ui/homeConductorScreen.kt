@@ -29,10 +29,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
 
 @Composable
-fun homeConductorScreen() {
+fun homeConductorScreen(navController : NavHostController,modifier: Modifier = Modifier,viewModel: OrderViewModel) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .height(IntrinsicSize.Min)
@@ -332,9 +333,9 @@ fun homeConductorScreen() {
 @Preview
 @Composable
 fun homeConductorScreenPreview(){
-    homeConductorScreen(
+    /*homeConductorScreen(
 
         //quantityOptions = DataSource.quantityOptions,
         //modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.padding_medium))
-    )
+    )*/
 }

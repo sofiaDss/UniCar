@@ -38,8 +38,8 @@ import edu.unicauca.aplimovil.unicar.UnicarScreen
 @Composable
 fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewModel){
 
-    var correoInput by remember { mutableStateOf("") }
-    var passwordInput by remember { mutableStateOf("") }
+       val correoValue = remember { mutableStateOf(TextFieldValue()) }
+    val claveValue = remember { mutableStateOf(TextFieldValue()) }
     val context = LocalContext.current
 
     val focusManager = LocalFocusManager.current
@@ -122,9 +122,9 @@ fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewMod
                                     .fillMaxWidth()
                                     .clip(shape = RoundedCornerShape(15.dp))
                                     .background(colorResource(id = R.color.azul2)),
-                                value = correoInput,
-                                onValueChange = { correoInput = it },
-                                label = { Text("Ingresa tu correo institucional") },
+                                value = correoValue.value,
+                                onValueChange = { correoValue.value = it },
+                                label = { Text("Ingresa tu correo institucional")},
                                 singleLine = true,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor =  colorResource(id = R.color.azul1),
@@ -154,8 +154,8 @@ fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewMod
                                     cursorColor =  colorResource(id = R.color.azul1),
                                     focusedIndicatorColor = colorResource(id = R.color.azul1)
                                 ),
-                                value = passwordInput,
-                                onValueChange = { passwordInput = it },
+                                value = claveValue.value,
+                                onValueChange = { claveValue.value = it },
                                 label = { Text("Ingresa tu contraseña") },
                                 singleLine = true,
                                 visualTransformation = PasswordVisualTransformation(),
@@ -194,14 +194,12 @@ fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewMod
                             ) {
                                 Button(
                                     onClick = {
-                                        val correo = correoInput
-                                        val password = passwordInput
-
-                                        if (correo.isNotEmpty() && password.isNotEmpty()) {
-                                            Toast.makeText(context, "información completa", Toast.LENGTH_SHORT).show()
-
+                                        val correo = correoValue.value.text
+                                        val clave = claveValue.value.text
+                                        if (correo.isNotBlank() && clave.isNotBlank()) {
+                                            viewModel.iniciarSesion(correo, navController)
                                         } else {
-
+                                            // Campos vacíos, mostrar mensaje de error o realizar alguna acción
                                             Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
                                         }
                                     },
