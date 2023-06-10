@@ -102,6 +102,7 @@ class OrderViewModel: ViewModel() {
                             "nombre" to nombre,
                             "id_usuario" to idUsuario,
                             "celular" to celular,
+                            "correo" to correo,
                             "rol" to "pasajero"
                         )
 
