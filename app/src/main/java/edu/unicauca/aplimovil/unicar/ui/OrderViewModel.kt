@@ -107,7 +107,7 @@ class OrderViewModel: ViewModel() {
 
                         if (userId != null) {
                             val db = Firebase.firestore
-                            db.collection("usuarios").document(userId)
+                            db.collection("Usuarios").document(userId)
                                 .set(userData)
                                 .addOnSuccessListener {
                                     navController.navigate(UnicarScreen.inicioScreen.name)
