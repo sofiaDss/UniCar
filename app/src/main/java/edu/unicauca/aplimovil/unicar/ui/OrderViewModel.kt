@@ -1,6 +1,10 @@
 package edu.unicauca.aplimovil.unicar.ui
 
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -28,9 +32,8 @@ class OrderViewModel: ViewModel() {
             .addOnCompleteListener { registrationToFirestoreTask ->
                 Log.d("Registro", "Registro completado: ${registrationToFirestoreTask.isSuccessful}")
                 if (registrationToFirestoreTask.isSuccessful) {
-                    // Registro exitoso
+
                 } else {
-                    // Manejar error al guardar datos en Firestore
                 }
             }
     }

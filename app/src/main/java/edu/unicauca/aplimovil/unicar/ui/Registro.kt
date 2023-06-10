@@ -1,6 +1,7 @@
 package edu.unicauca.aplimovil.unicar.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -244,46 +245,38 @@ fun registroScreen(modifier: Modifier = Modifier,viewModel: OrderViewModel) {
                             val confirmPassword = confirmarClaveValue.value.text
                             val passwordsMatch = verifyPasswordsMatch(password, confirmPassword)
                             val nombre = nombreValue.value.text
-                            val idUsuario = id_usuarioValue.value.text.toIntOrNull() ?: 0
+                            val idUsuario = id_usuarioValue.value.text.toIntOrNull()
                             val clave = claveValue.value.text
                             val correo = correoValue.value.text
                             val celular = celularValue.value.text
-                            Log.d("Registro", "Nombre: ${nombreValue.value.text}")
-                            Log.d("Registro", "ID Usuario: ${id_usuarioValue.value.text}")
-                            Log.d("Registro", "Clave: ${claveValue.value.text}")
-                            Log.d("Registro", "Correo: ${correoValue.value.text}")
-                            Log.d("Registro", "Celular: ${celularValue.value.text}")
 
-                            if (passwordsMatch) {
+                            if (passwordsMatch && nombre.isNotEmpty() && idUsuario != null && clave.isNotEmpty() && correo.isNotEmpty() && celular.isNotEmpty()) {
                                 viewModel.registrarUsuario(nombre, idUsuario, clave, correo, celular)
-                                showError.value = true
+                                Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+                                nombreValue.value = TextFieldValue()
+                                id_usuarioValue.value = TextFieldValue()
+                                claveValue.value = TextFieldValue()
+                                confirmarClaveValue.value=TextFieldValue()
+                                correoValue.value = TextFieldValue()
+                                celularValue.value = TextFieldValue()
                             } else {
-                                showError.value = true
+                                // Manejar el caso de que alguna caja de texto esté vacía
+                                Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(4.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = colorResource(id = R.color.azul1),
-
-                            )
+                        )
                     ) {
-                        Text(text = "REGISTRARSE",
+                        Text(
+                            text = "REGISTRARSE",
                             style = TextStyle(
                                 fontSize = 16.sp,
                                 color = Color.White,
-                                fontWeight = FontWeight.Bold)
-                        )
-                    }
-                    if (showError.value) {
-                        Text(
-                            text = "Las contraseñas no coinciden",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                color = Color.Red,
                                 fontWeight = FontWeight.Bold
-                            ),
-                            modifier = Modifier.padding(bottom = 8.dp)
+                            )
                         )
                     }
                 }
