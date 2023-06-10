@@ -89,7 +89,7 @@ class OrderViewModel: ViewModel() {
             }
     }
 
-    fun createUserWithEmailAndPassword(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String, home: () -> Unit){
+    fun createUserWithEmailAndPassword(nombre: String, idUsuario: Int, clave: String, correo: String, celular: String,navController: NavHostController){
         if (_loading.value == false) {
             _loading.value = true
             auth.createUserWithEmailAndPassword(correo, clave)
@@ -110,7 +110,7 @@ class OrderViewModel: ViewModel() {
                             db.collection("usuarios").document(userId)
                                 .set(userData)
                                 .addOnSuccessListener {
-                                    home()
+                                    navController.navigate(UnicarScreen.inicioScreen.name)
                                 }
                                 .addOnFailureListener { e ->
                                     Log.e("Registro", "Error al guardar los datos adicionales: ", e)
