@@ -38,7 +38,7 @@ import edu.unicauca.aplimovil.unicar.UnicarScreen
 @Composable
 fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewModel){
 
-       val correoValue = remember { mutableStateOf(TextFieldValue()) }
+    val correoValue = remember { mutableStateOf(TextFieldValue()) }
     val claveValue = remember { mutableStateOf(TextFieldValue()) }
     val context = LocalContext.current
 

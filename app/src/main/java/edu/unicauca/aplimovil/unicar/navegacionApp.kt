@@ -52,6 +52,7 @@ fun UnicarApp(
         //Incio de sesión de usuario conductor
         composable(route = UnicarScreen.homeConductorScreen.name){
             homeConductorScreen(navController,modifier,viewModel)
+            //homeConductorScreen()
         }
 
         //En contrucción

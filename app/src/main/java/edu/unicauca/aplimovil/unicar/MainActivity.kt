@@ -49,6 +49,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.unicauca.aplimovil.unicar.ui.construccionScreen
+import edu.unicauca.aplimovil.unicar.ui.homeConductorScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             UniCarTheme {
+                //homeConductorScreen()
                 UnicarApp()
                 //mostrarInterfaz()
             }
