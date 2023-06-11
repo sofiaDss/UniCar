@@ -1,6 +1,11 @@
 package edu.unicauca.aplimovil.unicar.ui
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.icu.util.Calendar
 import android.util.Log
+import android.widget.DatePicker
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,12 +16,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -30,17 +37,56 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
 import edu.unicauca.aplimovil.unicar.UnicarScreen
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Composable
 //fun homeConductorScreen() {
 fun homeConductorScreen(navController : NavHostController,modifier: Modifier = Modifier,viewModel: OrderViewModel) {
     val origenValue = remember { mutableStateOf(TextFieldValue()) }
     val destinoValue = remember { mutableStateOf(TextFieldValue()) }
+    val fechaValue = remember { mutableStateOf("--") }
+    val horaSalida = remember { mutableStateOf("--") }
+    val horaLlegada = remember { mutableStateOf("--") }
+    val auxHora = remember { mutableStateOf("--") }
     val cuposValue = remember { mutableStateOf(TextFieldValue()) }
     val auxValue = remember { mutableStateOf(TextFieldValue())}
 
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
+    val calendar = Calendar.getInstance()
+    val year: Int = 2000
+    val month: Int = 1
+    val day: Int = 1
+    calendar.time= Date()
+
+    val datePicker = DatePickerDialog(
+        context,
+        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+            fechaValue.value= "$dayOfMonth/${month+1}/$year"
+        }, year, month,day
+    )
+    datePicker.datePicker.minDate = calendar.timeInMillis
+
+    val hour: Int = 0
+    val minute: Int = 0
+
+    val timePicker1 = TimePickerDialog(
+        context,
+        { _, hour: Int, minute: Int ->
+            horaSalida.value = "$hour:$minute"
+        }, hour, minute, false
+    )
+    val timePicker2 = TimePickerDialog(
+        context,
+        { _, hour: Int, minute: Int ->
+            horaLlegada.value = "$hour:$minute"
+        }, hour, minute, false
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -129,7 +175,6 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
             Column(
                 modifier = Modifier
                     .padding(10.dp)
-                    //.height(IntrinsicSize.Min)
                     .clip(shape = RoundedCornerShape(15.dp))
                     .background(color = colorResource(id = R.color.ligthBlue))
             ) {
@@ -149,16 +194,14 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val imagen31 = painterResource(id = R.drawable.placeholder)
                     Image(
-                        painter = imagen31,
+                        painter = painterResource(id = R.drawable.placeholder),
                         contentDescription = null,
                         alignment = Alignment.BottomStart,
                         modifier = Modifier
                             .padding(start = 8.dp)
                             .size(25.dp)
                             .weight(0.10f)
-
                     )
                     Text(
                         text = "Origen",
@@ -166,15 +209,13 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                         color = colorResource(id = R.color.darkBlue),
                         modifier = Modifier.weight(0.40f)
                     )
-                    val imagen21 = painterResource(id = R.drawable.place)
                     Image(
-                        painter = imagen21,
+                        painter = painterResource(id = R.drawable.place),
                         contentDescription = null,
                         alignment = Alignment.BottomStart,
                         modifier = Modifier
                             .weight(0.10f)
                             .size(25.dp)
-                        //contentScale = ContentScale.Crop
                     )
                     Text(
                         text = "Destino",
@@ -230,59 +271,99 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                         )
                     )
                 }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .padding(horizontal =  16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.ligthBlue)
+                        ),
+                        onClick = {
+                            datePicker.show()
+                        }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.calendario),
+                            contentDescription = null,
+                            modifier=Modifier.padding(end = 16.dp)
+                        )
+                        Text(text = "Fecha:",fontWeight = FontWeight.Bold, color = colorResource(id = R.color.darkBlue))
+                    }
+                    Text(
+                        text = fechaValue.value,
+                        color = colorResource(id = R.color.black)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.ligthBlue)
+                        ),
+                        onClick = {
+                            timePicker1.show()
+                            horaSalida.value=auxHora.value
+                        }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.reloj2),
+                            contentDescription = null,
+                            modifier=Modifier.padding(end = 16.dp)
+                        )
+                        Text(text = "Hora salida:",fontWeight = FontWeight.Bold, color = colorResource(id = R.color.darkBlue))
+                    }
+                    Text(
+                        text = horaSalida.value,
+                        color = colorResource(id = R.color.black)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = colorResource(id = R.color.ligthBlue)
+                        ),
+                        onClick = {
+                            timePicker2.show()
+                        }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.reloj1),
+                            contentDescription = null,
+                            modifier=Modifier.padding(end = 16.dp)
+                        )
+                        Text(text = "Hora llegada:",fontWeight = FontWeight.Bold, color = colorResource(id = R.color.darkBlue))
+                    }
+                    Text(
+                        text = horaLlegada.value,
+                        color = colorResource(id = R.color.black)
+                    )
+                }
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val imagen11 = painterResource(id = R.drawable.calendar)
                     Image(
-                        painter = imagen11,
+                        painter = painterResource(id = R.drawable.people),
                         contentDescription = null,
                         alignment = Alignment.BottomStart,
                         modifier = Modifier
-                            .padding(16.dp)
+                            .padding(start = 16.dp)
                             .size(25.dp)
-                        //contentScale = ContentScale.Crop
-                    )
-                    Text(
-                        text = "Fecha salida:",
-                        fontWeight = FontWeight.Bold,
-                        color = colorResource(id = R.color.darkBlue)
-                    )
-                    Text(text = "Formulario")
-                }
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically) {
-                    val imagen12 = painterResource(id = R.drawable.calendar2)
-                    Image(
-                        painter = imagen12,
-                        contentDescription = null,
-                        alignment = Alignment.BottomStart,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(25.dp)
-                        //contentScale = ContentScale.Crop
-                    )
-                    Text(
-                        text = "Fecha llegada:",
-                        fontWeight = FontWeight.Bold,
-                        color = colorResource(id = R.color.darkBlue)
-                    )
-                    Text(text = "Formulario")
-                }
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically) {
-                    val imagen11 = painterResource(id = R.drawable.people)
-                    Image(
-                        painter = imagen11,
-                        contentDescription = null,
-                        alignment = Alignment.BottomStart,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(25.dp)
-                        //contentScale = ContentScale.Crop
                     )
                     Text(
                         text = "Cupos:",
@@ -291,7 +372,10 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                     )
                     TextField(
                         value = cuposValue.value,
-                        onValueChange = { cuposValue.value = it },
+                        onValueChange = {
+                            if (it.text.length <= 1) cuposValue.value = it
+                            else Toast.makeText(context, "Cupos supera el límite", Toast.LENGTH_SHORT).show()
+                        },
                         label = { Text("Cupos") },
                         modifier = Modifier
                             .padding(10.dp)
@@ -329,7 +413,6 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                         )
                     }
                 }
-
             }
             Spacer(modifier = Modifier.height(16.dp))
             Column(modifier = Modifier
