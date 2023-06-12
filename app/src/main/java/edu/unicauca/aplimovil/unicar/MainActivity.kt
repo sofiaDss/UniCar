@@ -59,7 +59,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             UniCarTheme {
-                //homeConductorScreen()
                 UnicarApp()
                 //mostrarInterfaz()
             }

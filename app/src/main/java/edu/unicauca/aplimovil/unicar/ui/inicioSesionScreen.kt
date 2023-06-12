@@ -197,7 +197,9 @@ fun inicioSesionScreen(navController : NavHostController,viewModel: OrderViewMod
                                         val correo = correoValue.value.text
                                         val clave = claveValue.value.text
                                         if (correo.isNotBlank() && clave.isNotBlank()) {
-                                            viewModel.iniciarSesion(correo, navController)
+                                            viewModel.setCorreo(correo)
+                                            viewModel.consultarUsuario()
+                                            viewModel.iniciarSesion(correo, navController, context)
                                         } else {
                                             // Campos vacíos, mostrar mensaje de error o realizar alguna acción
                                             Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()

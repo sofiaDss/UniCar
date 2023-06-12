@@ -1,9 +1,9 @@
 package edu.unicauca.aplimovil.unicar.ui
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
-import android.util.Log
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,18 +36,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.unicauca.aplimovil.unicar.R
 import edu.unicauca.aplimovil.unicar.UnicarScreen
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 //fun homeConductorScreen() {
-fun homeConductorScreen(navController : NavHostController,modifier: Modifier = Modifier,viewModel: OrderViewModel) {
+fun homeConductorScreen(
+    navController : NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: OrderViewModel,
+    orderUiState: OrderUiState
+) {
     val origenValue = remember { mutableStateOf(TextFieldValue()) }
     val destinoValue = remember { mutableStateOf(TextFieldValue()) }
     val fechaValue = remember { mutableStateOf("--") }
-    val horaSalida = remember { mutableStateOf("--") }
-    val horaLlegada = remember { mutableStateOf("--") }
+    val horaSalidaValue = remember { mutableStateOf("--") }
+    val horaLlegadaValue = remember { mutableStateOf("--") }
     val auxHora = remember { mutableStateOf("--") }
     val cuposValue = remember { mutableStateOf(TextFieldValue()) }
     val auxValue = remember { mutableStateOf(TextFieldValue())}
@@ -77,13 +80,13 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
     val timePicker1 = TimePickerDialog(
         context,
         { _, hour: Int, minute: Int ->
-            horaSalida.value = "$hour:$minute"
+            horaSalidaValue.value = "$hour:$minute"
         }, hour, minute, false
     )
     val timePicker2 = TimePickerDialog(
         context,
         { _, hour: Int, minute: Int ->
-            horaLlegada.value = "$hour:$minute"
+            horaLlegadaValue.value = "$hour:$minute"
         }, hour, minute, false
     )
 
@@ -94,7 +97,7 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
     ){
         Row(
             modifier = Modifier
-                .fillMaxHeight(0.23f)
+                .fillMaxHeight(0.266f)
                 .clip(shape = RoundedCornerShape(bottomEnd = 60.dp))
                 .background(color = colorResource(id = R.color.darkBlue)),
             verticalAlignment = Alignment.CenterVertically,
@@ -118,17 +121,24 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                     )
                     Spacer(modifier = Modifier.weight(0.1f))
                     IconButton(
-                        onClick = {Log.d("usuario", "información del Usuario")}
+                        onClick = {
+                            navController.navigate(UnicarScreen.construccionScreen.name)
+                        }
                     ) {
                         Image(painter = painterResource(id = R.drawable.usuario), contentDescription =null )
                     }
                     IconButton(
-                        onClick = {Log.d("información", "información de la app")}
+                        onClick = {
+                            navController.navigate(UnicarScreen.construccionScreen.name)
+                        }
                     ) {
                         Image(painter = painterResource(id = R.drawable.botoninformacion), contentDescription =null )
                     }
                     IconButton(
-                        onClick = {Log.d("sesion", "cerrar sesión")}
+                        onClick = {
+                            viewModel.resetInfo()
+                            navController.navigate(UnicarScreen.inicioScreen.name)
+                        }
                     ) {
                         Image(painter = painterResource(id = R.drawable.cerrarsesion), contentDescription =null )
                     }
@@ -138,15 +148,15 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "User Name",
+                        text = viewModel.uiState.value.nameUser,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.white),
-                        modifier = Modifier.padding(10.dp)
+                        modifier = Modifier.padding(10.dp).weight(0.5f)
                     )
                     Spacer(modifier = Modifier.weight(0.1f))
                     Button(
-                        onClick = {Log.d("tipo usuario", "cambiar de role si cuenta con ambos registrados") },
+                        onClick = { /* cambiar de role si cuenta con ambos registrados */ },
                         modifier = Modifier
                             .padding(16.dp)
                             .weight(0.4f),
@@ -311,7 +321,7 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                         ),
                         onClick = {
                             timePicker1.show()
-                            horaSalida.value=auxHora.value
+                            horaSalidaValue.value=auxHora.value
                         }
                     ) {
                         Image(
@@ -322,7 +332,7 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                         Text(text = "Hora salida:",fontWeight = FontWeight.Bold, color = colorResource(id = R.color.darkBlue))
                     }
                     Text(
-                        text = horaSalida.value,
+                        text = horaSalidaValue.value,
                         color = colorResource(id = R.color.black)
                     )
                 }
@@ -349,7 +359,7 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                         Text(text = "Hora llegada:",fontWeight = FontWeight.Bold, color = colorResource(id = R.color.darkBlue))
                     }
                     Text(
-                        text = horaLlegada.value,
+                        text = horaLlegadaValue.value,
                         color = colorResource(id = R.color.black)
                     )
                 }
@@ -396,7 +406,29 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
-                        onClick = { /* Lógica del botón de registro */ },
+                        onClick = {
+                            val origen = origenValue.value.text
+                            val destino = destinoValue.value.text
+                            val fecha = fechaValue.value
+                            val horaSalida = horaSalidaValue.value
+                            val horaLlegada = horaLlegadaValue.value
+                            val cupos = cuposValue.value.text.toIntOrNull()
+
+                            if (origen.isNotEmpty() && destino.isNotEmpty() && !fecha.equals("--") && !horaSalida.equals("--") && !horaLlegada.equals("--") && cupos != null){
+                                    viewModel.registrarRuta(origen, destino, fecha, horaSalida, horaLlegada, cupos,context)
+                                    origenValue.value = TextFieldValue()
+                                    destinoValue.value = TextFieldValue()
+                                    fechaValue.value = "--"
+                                    horaSalidaValue.value = "--"
+                                    horaLlegadaValue.value = "--"
+                                    cuposValue.value = TextFieldValue()
+                                    navController.navigate(UnicarScreen.homeConductorScreen.name)
+
+                            } else {
+                                // Manejar el caso de que alguna caja de texto esté vacía
+                                Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+                            }
+                        },
                         modifier = Modifier
                             .padding(end = 8.dp, bottom = 16.dp)
                             .height(48.dp)
@@ -449,11 +481,11 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                             //contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = "Destino:",
+                            text = "Destino: ",
                             fontWeight = FontWeight.Bold,
                             color = colorResource(id = R.color.darkBlue)
                         )
-                        Text(text = "Texto de database")
+                        Text(text = orderUiState.destino)
                     }
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
@@ -465,14 +497,13 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                             modifier = Modifier
                                 .padding(16.dp)
                                 .size(25.dp)
-                            //contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = "Fecha inicio:",
+                            text = "Fecha/Hora: ",
                             fontWeight = FontWeight.Bold,
                             color = colorResource(id = R.color.darkBlue)
                         )
-                        Text(text = "Texto de database")
+                        Text(text = orderUiState.fecha)
                     }
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
@@ -484,14 +515,13 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                             modifier = Modifier
                                 .padding(16.dp)
                                 .size(25.dp)
-                            //contentScale = ContentScale.Crop
                         )
                         Text(
-                            text = "Cupos reservados:",
+                            text = "Cupos reservados: ",
                             fontWeight = FontWeight.Bold,
                             color = colorResource(id = R.color.darkBlue)
                         )
-                        Text(text = "Texto de database")
+                        Text(text =  orderUiState.cupos)
                     }
                 }
             }
@@ -511,7 +541,9 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.darkBlue)
                 ),
-                onClick = {/*direcciona a interfaz home conductor*/}
+                onClick = {
+                    navController.navigate(UnicarScreen.homeConductorScreen.name)
+                }
             ) {
                 Image(painter = painterResource(id = R.drawable.casa), contentDescription = null)
                 Text(text = "Home", color = colorResource(id = R.color.white))
@@ -522,7 +554,9 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.darkBlue)
                 ),
-                onClick = { /*direcciona al vehículo del conductor*/ }
+                onClick = {
+                    navController.navigate(UnicarScreen.construccionScreen.name)
+                }
             ) {
                 Image(painter = painterResource(id = R.drawable.coche), contentDescription = null)
                 Text(text = "Vehículo", color = colorResource(id = R.color.white))
@@ -533,7 +567,9 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.darkBlue)
                 ),
-                onClick = { /*direcciona a ubicaciones registradas*/ }
+                onClick = {
+                    navController.navigate(UnicarScreen.construccionScreen.name)
+                }
             ) {
                 Image(painter = painterResource(id = R.drawable.mapa), contentDescription = null)
                 Text(text = "Ubicación", color = colorResource(id = R.color.white))
@@ -544,7 +580,9 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.darkBlue)
                 ),
-                onClick = { /*direcciona a ubicaciones registradas*/ }
+                onClick = {
+                    navController.navigate(UnicarScreen.construccionScreen.name)
+                }
             ) {
                 Image(painter = painterResource(id = R.drawable.historia), contentDescription = null)
                 Text(text = "Historial", color = colorResource(id = R.color.white))
@@ -561,9 +599,4 @@ fun homeConductorScreen(navController : NavHostController,modifier: Modifier = M
 @Composable
 fun homeConductorScreenPreview(){
     //homeConductorScreen()
-    /*homeConductorScreen(
-
-        //quantityOptions = DataSource.quantityOptions,
-        //modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.padding_medium))
-    )*/
 }

@@ -1,9 +1,10 @@
 package edu.unicauca.aplimovil.unicar
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,6 +25,7 @@ fun UnicarApp(
     modifier: Modifier = Modifier
 ){
     val navController = rememberNavController()
+    val uiState by viewModel.uiState.collectAsState()
 
     NavHost(
         navController = navController,
@@ -51,8 +53,7 @@ fun UnicarApp(
 
         //Incio de sesión de usuario conductor
         composable(route = UnicarScreen.homeConductorScreen.name){
-            homeConductorScreen(navController,modifier,viewModel)
-            //homeConductorScreen()
+            homeConductorScreen(navController,modifier,viewModel,uiState)
         }
 
         //En contrucción
