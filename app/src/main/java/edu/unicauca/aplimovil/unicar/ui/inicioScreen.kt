@@ -238,6 +238,46 @@ fun MainScreen(navController : NavHostController, modifier: Modifier = Modifier,
                     )
                     /////////
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(modifier = Modifier
+                    .clip(shape = RoundedCornerShape(15.dp))
+                    .background(color = colorResource(id = R.color.ligthBlue))) {
+                    //////////
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.height(IntrinsicSize.Min)) {
+                        //////////////
+                        val imagen9 = painterResource(id = R.drawable.creditos)
+                        Image(
+                            painter = imagen9,
+                            contentDescription = null,
+                            alignment = Alignment.BottomStart,
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(80.dp)
+                            //modifier = Modifier.size(32.dp),
+                            //contentScale = ContentScale.Crop
+                        )
+                        //////////////
+                        Text(
+                            text = "Créditos",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .fillMaxWidth(),
+                            color = colorResource(id = R.color.darkBlue),
+                            fontSize = 34.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        //////////////
+                    }
+                    /////////
+                    Text(
+                        text = stringResource(id = R.string.creditos),
+                        modifier = Modifier.padding(8.dp),
+                        textAlign = TextAlign.Justify
+                    )
+                    /////////
+                }
             }
 
             Row(
