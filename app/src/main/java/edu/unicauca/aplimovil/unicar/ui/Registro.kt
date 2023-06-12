@@ -157,7 +157,7 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
 
                 TextField(
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(60.dp)
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .focusRequester(focusRequester)
@@ -183,7 +183,7 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(60.dp)
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .focusRequester(focusRequester)
@@ -210,7 +210,7 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(60.dp)
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .focusRequester(focusRequester)
@@ -236,7 +236,7 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(60.dp)
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .focusRequester(focusRequester)
@@ -265,7 +265,7 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(60.dp)
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .focusRequester(focusRequester)
@@ -293,7 +293,7 @@ fun registroScreen(navController : NavHostController,modifier: Modifier = Modifi
                 Spacer(modifier = Modifier.height(5.dp))
                 TextField(
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(60.dp)
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
                         .background(colorResource(id = R.color.azul2)),

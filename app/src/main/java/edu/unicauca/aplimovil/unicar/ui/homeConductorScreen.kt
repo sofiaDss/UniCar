@@ -69,7 +69,7 @@ fun homeConductorScreen(
     val datePicker = DatePickerDialog(
         context,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            fechaValue.value= "$dayOfMonth/${month+1}/$year"
+            fechaValue.value= String.format("%02d/%02d/%02d",dayOfMonth,month+1,year)
         }, year, month,day
     )
     datePicker.datePicker.minDate = calendar.timeInMillis
@@ -80,13 +80,13 @@ fun homeConductorScreen(
     val timePicker1 = TimePickerDialog(
         context,
         { _, hour: Int, minute: Int ->
-            horaSalidaValue.value = "$hour:$minute"
+            horaSalidaValue.value = String.format("%02d:%02d %s", if (hour>12) hour-12 else hour,minute,if (hour<12) "am" else "pm")
         }, hour, minute, false
     )
     val timePicker2 = TimePickerDialog(
         context,
         { _, hour: Int, minute: Int ->
-            horaLlegadaValue.value = "$hour:$minute"
+            horaLlegadaValue.value = String.format("%02d:%02d %s", if (hour>12) hour-12 else hour,minute,if (hour<12) "am" else "pm")
         }, hour, minute, false
     )
 
@@ -499,11 +499,11 @@ fun homeConductorScreen(
                                 .size(25.dp)
                         )
                         Text(
-                            text = "Fecha/Hora: ",
+                            text = "Fecha - Hora: ",
                             fontWeight = FontWeight.Bold,
                             color = colorResource(id = R.color.darkBlue)
                         )
-                        Text(text = orderUiState.fecha)
+                        Text(text = orderUiState.fecha + " - "+ orderUiState.horaSalida)
                     }
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
